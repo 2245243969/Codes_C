@@ -135,13 +135,13 @@ int main() {
     scanf("%d", &n);
     InitList(&L);
     CreatList_R(&L, n);
-    int i;
-    ElemType e;
-    printf("Please enter the location number of a new Lnode that you want to insret");
-    scanf("%d", &i);
-    printf("Please enter an element for the new Lnode data");
-    scanf("%d", &e);
-    ListInsert(&L, i, e);
+//    int i;
+//    ElemType e;
+//    printf("Please enter the location number of a new Lnode that you want to insret");
+//    scanf("%d", &i);
+//    printf("Please enter an element for the new Lnode data");
+//    scanf("%d", &e);
+//    ListInsert(&L, i, e);
     PrintElem(&L);
     return 0;
 }

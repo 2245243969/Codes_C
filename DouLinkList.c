@@ -35,7 +35,9 @@ void CreatList_H(DuLinkList *L, int n) {
         scanf("%d", &p->data);
         p->next = r->next;
         p->prior = r;
+if(i!=0){r->next->prior=p;}
         r->next = p;
+
 
     }
 }
@@ -108,11 +110,10 @@ Status DuLinkListDelete(DuLinkList *L, int i) {
 //打印元素
 Status PrintElem(DuLinkList *L) {
     DuLinkList p;
-    p = (*L);
+    p = (*L)->next;
     while (p) {
-        p=p->next;
         printf("%d", p->data);
- ;
+        p=p->next;
     }
     return OK;
 }
@@ -124,10 +125,11 @@ int main() {
     scanf("%d", &n);
     InitList(&L);
     CreatList_R(&L, n);
-    int i;
-    ElemType e;
-    printf("Please enter the location number of a new DuLNode that you want to delete");
-    scanf("%d", &i);
-    DuLinkListDelete(&L, i);
+//    int i;
+//    ElemType e;
+//    printf("Please enter the location number of a new DuLNode that you want to delete");
+//    scanf("%d", &i);
+//    DuLinkListDelete(&L, i);
     PrintElem(&L);
+    return 0;
 }
