@@ -33,12 +33,16 @@ void CreatList_H(DuLinkList *L, int n) {
     for (int i = 0; i < n; i++) {
         p = (DuLNode *) malloc(sizeof(DuLNode));//为新的p结点动态分配内存
         scanf("%d", &p->data);
-        p->next = r->next;
-        p->prior = r;
-if(i!=0){r->next->prior=p;}
-        r->next = p;
-
-
+        if (i == 0) {
+            p->next = r->next;
+            p->prior = r;
+            r->next = p;
+        } else {
+            p->next = r->next;
+            p->prior = r;
+            r->next->prior = p;
+            r->next = p;
+        }
     }
 }
 
@@ -60,26 +64,52 @@ void CreatList_R(DuLinkList *L, int n) {
     }
 }
 
+//计算双向链表的长度
+Status DuListLength(DuLinkList *L) {
+    DuLinkList p;
+    p = (*L)->next;
+    int length = 0;
+    while (p) {
+        p = p->next;
+        length++;
+    }
+    return length;
+}
 
 //双向链表的插入
 //即在带头结点的双向链表中第i个位置之前插入元素e
 Status DuListInsert(DuLinkList *L, int i, ElemType e) {
     DuLinkList p, s;
     p = (*L);
-    for (int j = 1; j <= i; j++) {
-        p = p->next;
-        if (!p) {
+    int length = DuListLength(&p);
+//判断是不是在链表尾后的一个位置插入元素
+    if (i == length + 1) {
+        while (p->next) {
+            p = p->next;
+        }
+        s = (DuLNode *) malloc(sizeof(DuLNode));
+        s->data = e;
+        s->prior = p;
+        s->next = NULL;
+        p->next = s;
+        return OK;
+    } else {
+        if (i <= length) {
+            for(int j=1;j<=i;j++){
+                p=p->next;
+            }
+            s = (DuLNode *) malloc(sizeof(DuLNode));
+            s->data = e;
+            s->prior = p->prior;
+            p->prior->next = s;
+            p->prior = s;
+            s->next = p;
+            return OK;
+        } else {
+            printf("Insert ERROR!!!");
             return ERROR;
         }
-
-    }//判断第i位置在双向链表中存不存在
-    s = (DuLNode *) malloc(sizeof(DuLNode));
-    s->data = e;
-    s->prior = p->prior;
-    p->prior->next = s;
-    p->prior = s;
-    s->next = p;
-    return OK;
+    }
 
 }
 
@@ -88,14 +118,20 @@ Status DuListInsert(DuLinkList *L, int i, ElemType e) {
 Status DuLinkListDelete(DuLinkList *L, int i) {
     DuLinkList p;
     p = (*L);
+    //判断第i位置在双向链表中存不存在
+    if (i == 0) {
+        printf("Delete ERROR!!!");
+        return ERROR;
+    }
     for (int j = 1; j <= i; j++) {
         p = p->next;
         if (!p) {
+            printf("Delete ERROR!!!");
             return ERROR;
         }
 
-    }//判断第i位置在双向链表中存不存在
-    if (p->next != NULL){
+    }
+    if (p->next != NULL) {
         p->prior->next = p->next;
         p->next->prior = p->prior;
         free(p);//判断i位置是不是尾结点
@@ -113,7 +149,7 @@ Status PrintElem(DuLinkList *L) {
     p = (*L)->next;
     while (p) {
         printf("%d", p->data);
-        p=p->next;
+        p = p->next;
     }
     return OK;
 }
@@ -124,12 +160,15 @@ int main() {
     printf("Please enter the initial number for the LinkList:");
     scanf("%d", &n);
     InitList(&L);
-    CreatList_R(&L, n);
-//    int i;
-//    ElemType e;
-//    printf("Please enter the location number of a new DuLNode that you want to delete");
-//    scanf("%d", &i);
-//    DuLinkListDelete(&L, i);
+    CreatList_H(&L, n);
+    int length = DuListLength(&L);
+    printf("%d\n", length);
+    int i;
+    ElemType e;
+    printf("Please enter the location number of a new DuLNode that you want to delete");
+    scanf("%d %d", &i,&e);
+
+    DuListInsert(&L, i,e);
     PrintElem(&L);
     return 0;
 }
