@@ -94,6 +94,7 @@ Status DuListInsert(DuLinkList *L, int i, ElemType e) {
         p->next = s;
         return OK;
     } else {
+        //判断是不是在链表中插入元素
         if (i <= length) {
             for(int j=1;j<=i;j++){
                 p=p->next;
